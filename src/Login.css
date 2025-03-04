@@ -54,6 +54,8 @@
 }
 
 .signup-link {
+
+  margin-right: 10px;
   color: #29AB87;
   cursor: pointer;
   font-weight: 600;

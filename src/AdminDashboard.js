@@ -10,22 +10,25 @@ const AdminDashboard = () => {
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("email");
     localStorage.removeItem("role");
-    navigate("/login");
+    navigate("/");
   };
 
   return (
     <div className="admin-dashboard">
       <h1>Admin Dashboard</h1>
       <p>Welcome, Admin!</p>
-
       <div className="dashboard-actions">
-        <button onClick={() => navigate("/manage-users")}>Manage Users</button>
-        <button onClick={() => navigate("/view-statistics")}>
-          View Statistics
+        <button onClick={() => navigate("/manage-users")}>View Users</button>
+        <button onClick={() => navigate("/manage-sellers")}>
+          View Sellers
         </button>
-        <button onClick={() => navigate("/manage-products")}>
-          Manage Products
+        <button onClick={() => navigate("/admin-manage-products")}>
+          Manage Bidding
         </button>
+        <button onClick={() => navigate("/manage-orders")}>
+          Veiw Orders
+        </button>
+        
       </div>
 
       <button className="logout-button" onClick={handleLogout}>

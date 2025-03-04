@@ -12,30 +12,29 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://maxmusau.pythonanywhere.com/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email, // Ensure this matches the API's expected field
-            password: password, // Ensure this matches the API's expected field
-          }),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email, // Ensure this matches the API's expected field
+          password: password, // Ensure this matches the API's expected field
+        }),
+      });
 
       console.log("Response status:", response.status); // Log the status code
       const data = await response.json(); // Parse the response body
       console.log("Response data:", data); // Log the response data
       console.log("Response data role:", data.role); // Log the response data
+      console.log("Response id:", data.id); // Log the response data
 
       if (response.ok) {
         // Handle successful login
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("email", email); // Optionally store the email
         localStorage.setItem("seller_id", data.seller_id); // Store the user's role
+        localStorage.setItem("user_id", data.id);
 
         // Redirect based on the user's role
         switch (data.role) {
@@ -97,7 +96,13 @@ const Login = () => {
       <p>
         Don't have an account?{" "}
         <span className="signup-link" onClick={() => navigate("/signup")}>
-          Sign up
+          SignUp User
+        </span>
+        <span
+          className="signup-link"
+          onClick={() => navigate("/signupseller")}
+        >
+          SignUp Seller
         </span>
       </p>
     </div>

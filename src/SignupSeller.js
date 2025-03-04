@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Signup.css";
+import "./SignupSeller.css";
 
-const Signup = () => {
+const SignupSeller = () => {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("user"); // Default role is "user"
@@ -24,13 +26,15 @@ const Signup = () => {
     const requestBody = {
       username,
       email,
+      phone,
+      address,
       password,
       role,
     };
 
     try {
       // Make the API call to register the user
-      const response = await fetch("http://127.0.0.1:5000/register", {
+      const response = await fetch("http://127.0.0.1:5000/add-seller", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,6 +77,23 @@ const Signup = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        {/* phone */}
+        <input
+          type="text"
+          placeholder="Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
+
+        <input
+          type="text"
+          placeholder="Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+
         <input
           type="password"
           placeholder="Password"
@@ -88,9 +109,8 @@ const Signup = () => {
           required
         />
         <select value={role} onChange={(e) => setRole(e.target.value)} required>
-          
-          <option value="user">user</option>
-          {/* buyer */}
+          <option value="seller">seller</option>
+          {/* seller */}
         </select>
         <button type="submit">Sign Up</button>
       </form>
@@ -104,4 +124,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupSeller;

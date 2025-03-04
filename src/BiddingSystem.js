@@ -1,78 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./BiddingSystem.css";
 
 const BiddingSystem = () => {
-  const [bids, setBids] = useState([
-    {
-      id: 1,
-      item: "Laptop",
-      highestBid: 500,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      item: "Smartphone",
-      highestBid: 300,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      item: "Tablet",
-      highestBid: 200,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 4,
-      item: "Headphones",
-      highestBid: 100,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 5,
-      item: "Camera",
-      highestBid: 400,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 6,
-      item: "Smartwatch",
-      highestBid: 250,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 7,
-      item: "Gaming Console",
-      highestBid: 600,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 8,
-      item: "Drone",
-      highestBid: 700,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 9,
-      item: "Monitor",
-      highestBid: 350,
-      image: "https://via.placeholder.com/150",
-    },
-  ]);
-  const [bidAmount, setBidAmount] = useState("");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const navigate = useNavigate();
+  const [bids, setBids] = useState([]);
 
-  const placeBid = (itemId) => {
-    if (!bidAmount || bidAmount <= 0) return alert("Enter a valid bid amount");
-    setBids((prevBids) =>
-      prevBids.map((bid) =>
-        bid.id === itemId && bidAmount > bid.highestBid
-          ? { ...bid, highestBid: Number(bidAmount) }
-          : bid
-      )
-    );
-    setBidAmount("");
-    alert("Bid placed successfully!");
-  };
+  // Fetch data from the API when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/items");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data); // Log the API response
+        setBids(data); // Set the fetched data directly
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="container">
@@ -81,21 +32,19 @@ const BiddingSystem = () => {
         {bids.map((bid) => (
           <div key={bid.id} className="card">
             <div className="card-content">
-              <img src={bid.image} alt={bid.item} className="item-image" />
-              <h2 className="item-name">{bid.item}</h2>
-              <p>Highest Bid: ${bid.highestBid}</p>
-              <input
-                type="number"
-                className="input"
-                placeholder="Enter bid amount"
-                value={selectedItem === bid.id ? bidAmount : ""}
-                onChange={(e) => {
-                  setSelectedItem(bid.id);
-                  setBidAmount(e.target.value);
-                }}
+              {/* Display the image */}
+              <img
+                src={`http://127.0.0.1:5000/static/uploads/${bid.image}`}
+                alt={bid.title}
+                className="item-image"
               />
-              <button onClick={() => placeBid(bid.id)} className="button">
-                Place Bid
+              {/* Display the title */}
+              <h2 className="item-name">{bid.title}</h2>
+              {/* Display the base price */}
+              <p>Base Price: ${bid.base_price}</p>
+              {/* Button to navigate to the single item page */}
+              <button onClick={() => navigate(`/item/${bid.id}`)}>
+                Start Bidding
               </button>
             </div>
           </div>
